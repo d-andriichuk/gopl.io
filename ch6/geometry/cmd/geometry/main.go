@@ -19,4 +19,8 @@ func main() {
 		{X: 1, Y: 1},
 	}
 	fmt.Println(perim.Distance())
+
+	r := &geometry.Point{X: 1, Y: 2}
+	r.ScaleBy(2)
+	fmt.Println(*r)
 }

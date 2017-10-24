@@ -3,17 +3,25 @@ package common
 import (
 	"errors"
 	"fmt"
-	"os"
 	"plugin"
 
 	"gopl.io/plugins/greeter/common/contracts"
 )
 
+const (
+	chinesePlugin = "./chi/chi.so"
+	englishPlugin = "./eng/eng.so"
+
+	englishLang = "english"
+	chineseLang = "chinese"
+	defaultLang = englishLang
+)
+
 var (
 	// GreeterDescriptor factory
 	GreeterDescriptor = map[string]contracts.IGreeter{
-		"chinese": newGreeter("chinese"),
-		"english": newGreeter("english"),
+		englishLang: newGreeter(englishLang),
+		chineseLang: newGreeter(chineseLang),
 	}
 )
 
@@ -28,35 +36,39 @@ func NewGreeter(lang string) (contracts.IGreeter, error) {
 		return nil, errors.New("This language is not definded")
 	}
 
+	if greeter == nil {
+		return nil, errors.New("Create greeter failed")
+	}
+
 	return greeter, nil
 }
 
 func newGreeter(lang string) contracts.IGreeter {
-	l := "english"
+	l := englishLang
 	if lang != "" {
 		l = lang
 	}
 	var mod string
 	switch l {
-	case "english":
-		mod = "./eng/eng.so"
-	case "chinese":
-		mod = "./chi/chi.so"
+	case englishLang:
+		mod = englishPlugin
+	case chineseLang:
+		mod = chinesePlugin
 	default:
 		fmt.Printf("Don't speak that language\n")
-		os.Exit(1)
+		return nil
 	}
 
 	plugin, err := plugin.Open(mod)
 	if err != nil {
 		fmt.Printf("Cann't open a plugin %v\n", err)
-		os.Exit(1)
+		return nil
 	}
 
 	constructor, err := plugin.Lookup("NewGreeter")
 	if err != nil {
 		fmt.Printf("Cann't look up a constructor %v\n", err)
-		os.Exit(1)
+		return nil
 	}
 
 	//var greeter contracts.Greeter

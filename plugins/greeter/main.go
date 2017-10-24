@@ -15,7 +15,7 @@ func main() {
 		// found   bool
 		err error
 	)
-	lang := "english"
+	lang := common.DefaultLang
 	if len(os.Args) == 2 {
 		lang = os.Args[1]
 	}

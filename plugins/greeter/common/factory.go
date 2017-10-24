@@ -12,16 +12,19 @@ const (
 	chinesePlugin = "./chi/chi.so"
 	englishPlugin = "./eng/eng.so"
 
-	englishLang = "english"
-	chineseLang = "chinese"
-	defaultLang = englishLang
+	// EnglishLang const
+	EnglishLang = "english"
+	// ChineseLang const
+	ChineseLang = "chinese"
+	// DefaultLang const
+	DefaultLang = EnglishLang
 )
 
 var (
 	// GreeterDescriptor factory
 	GreeterDescriptor = map[string]contracts.IGreeter{
-		englishLang: newGreeter(englishLang),
-		chineseLang: newGreeter(chineseLang),
+		EnglishLang: newGreeter(EnglishLang),
+		ChineseLang: newGreeter(ChineseLang),
 	}
 )
 
@@ -44,15 +47,15 @@ func NewGreeter(lang string) (contracts.IGreeter, error) {
 }
 
 func newGreeter(lang string) contracts.IGreeter {
-	l := englishLang
+	l := DefaultLang
 	if lang != "" {
 		l = lang
 	}
 	var mod string
 	switch l {
-	case englishLang:
+	case EnglishLang:
 		mod = englishPlugin
-	case chineseLang:
+	case ChineseLang:
 		mod = chinesePlugin
 	default:
 		fmt.Printf("Don't speak that language\n")
@@ -72,5 +75,5 @@ func newGreeter(lang string) contracts.IGreeter {
 	}
 
 	//var greeter contracts.Greeter
-	return constructor.(func(string) contracts.IGreeter)(lang)
+	return constructor.(func(string) contracts.IGreeter)(l)
 }

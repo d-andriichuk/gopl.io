@@ -6,17 +6,6 @@ import (
 	"gopl.io/plugins/greeter/common/contracts"
 )
 
-// Greeting type
-type greeting struct {
-	name string
-}
-
-// NewGreeter constructor
-func NewGreeter(name string) contracts.IGreeter {
-	g := &greeting{name: name}
-	return g
-}
-
 // Greet method
 func (g *greeting) Greet() {
 	fmt.Println("你好宇宙")

@@ -33,11 +33,11 @@ func NewGreeter(lang string) (contracts.IGreeter, error) {
 	)
 
 	if greeter, found = GreeterDescriptor[lang]; !found {
-		return nil, errors.New("This language is not definded")
+		return nil, errors.New("This language is undefinded")
 	}
 
 	if greeter == nil {
-		return nil, errors.New("Create greeter failed")
+		return nil, errors.New("Greate create failed")
 	}
 
 	return greeter, nil

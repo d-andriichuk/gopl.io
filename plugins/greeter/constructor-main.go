@@ -37,7 +37,7 @@ func main() {
 	}
 
 	//var greeter contracts.Greeter
-	greeter := constructor.(func() contracts.Greeter)()
+	greeter := constructor.(func() contracts.IGreeter)()
 
 	greeter.Greet()
 

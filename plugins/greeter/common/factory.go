@@ -1,6 +1,7 @@
 package common
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"plugin"
@@ -10,13 +11,27 @@ import (
 
 var (
 	// GreeterDescriptor factory
-	GreeterDescriptor = map[string]contracts.Greeter{
+	GreeterDescriptor = map[string]contracts.IGreeter{
 		"chinese": newGreeter("chinese"),
 		"english": newGreeter("english"),
 	}
 )
 
-func newGreeter(lang string) contracts.Greeter {
+// NewGreeter constructor
+func NewGreeter(lang string) (contracts.IGreeter, error) {
+	var (
+		greeter contracts.IGreeter
+		found   bool
+	)
+
+	if greeter, found = GreeterDescriptor[lang]; !found {
+		return nil, errors.New("This language is not definded")
+	}
+
+	return greeter, nil
+}
+
+func newGreeter(lang string) contracts.IGreeter {
 	l := "english"
 	if lang != "" {
 		l = lang
@@ -45,5 +60,5 @@ func newGreeter(lang string) contracts.Greeter {
 	}
 
 	//var greeter contracts.Greeter
-	return constructor.(func() contracts.Greeter)()
+	return constructor.(func(string) contracts.IGreeter)(lang)
 }

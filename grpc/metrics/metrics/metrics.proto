@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package metrics;
+
+service Metrics {
+    rpc Exchange(MetricsModel) returns (MetricsResponse) {}
+}
+
+message MetricsModel {
+    string metrics = 1;
+}
+
+message MetricsResponse {
+    string status = 1;
+}
